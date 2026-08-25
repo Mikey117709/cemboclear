@@ -1,0 +1,27 @@
+# CemboClear .gitignore
+
+# Config with real credentials
+/config.php
+
+# Storage uploads (user-uploaded files)
+/storage/uploads/*
+!/storage/uploads/.gitkeep
+
+# Runtime rate-limit state (transient)
+/storage/rate_limits/*
+!/storage/rate_limits/.gitkeep
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Composer (if added later)
+/vendor/
+composer.lock
+
+# Browser/test artifacts
+/.playwright-mcp/
