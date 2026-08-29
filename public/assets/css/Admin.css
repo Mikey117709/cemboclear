@@ -1,0 +1,43 @@
+.sidebar-sub {
+    padding-left: 2.5rem;
+}
+.active-menu {
+    background-color: #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.12);
+}
+.rbac-card {
+    border-radius: 14px;
+    border: 2px solid #d1d5db;
+    box-shadow: 0 6px 0 rgba(0,0,0,0.03);
+    background: #fff;
+}
+.rbac-accent-blue { border-left: 8px solid #0b3b8f; }
+.rbac-accent-red { border-left: 8px solid #7a0f0f; }
+.rbac-accent-yellow { border-left: 8px solid #d48f02; }
+
+.encryption-card { border-radius: 14px; border: 2px solid #6b6b6b; padding: 48px 64px; max-width: 720px; margin: 36px auto; }
+.encryption-lock { width: 84px; height: 84px; background: #f5c84a; border-radius: 9999px; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px auto; }
+.encryption-title { color: #eab308; font-size: 38px; font-weight: 800; text-align: center; margin-bottom: 12px; }
+.note-box { background: #fff4cc; border-left: 6px solid #8b6b2f; padding: 12px 16px; color: #4b3b1a; border-radius: 4px; margin-bottom: 18px; }
+.input-rounded { border: 2px solid #9ca3af; border-radius: 9999px; padding: 14px 18px; width: 100%; outline: none; }
+.encrypt-btn { background: #0447a6; color: white; padding: 12px 28px; border-radius: 10px; font-weight: 700; }
+.logo-img { background: transparent; display: block; box-shadow: none !important; }
+.mail-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+}
+.mail-list-item {
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+.mail-list-item:hover {
+    background: #f8fafc;
+}
+.mail-list-item.active {
+    background: #eff6ff;
+    border-left-color: #2563eb;
+}
