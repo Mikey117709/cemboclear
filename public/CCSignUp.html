@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CemboClear - Create Account</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at center, #0077c0 0%, #003366 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .signup-card {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 500px;
+            padding: 35px 45px;
+            border-radius: 4px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        
+        .header-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .logo-img {
+            max-height: 50px;
+            width: auto;
+        }
+
+        .brand-name {
+            color: #0056b3;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .page-title {
+            color: #1a0dab;
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .divider {
+            height: 2px;
+            background-color: #7f86d4;
+            width: 100%;
+            margin-bottom: 25px;
+        }
+
+        .error-banner {
+            display: none;
+            background-color: #fce8e6;
+            border: 1px solid #ea4335;
+            color: #c5221f;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            text-align: left;
+            line-height: 1.5;
+        }
+
+        
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .section-label {
+            color: #1a0dab;
+            font-size: 16px;
+            font-weight: 700;
+            text-align: left;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #7a7a7a;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333333;
+            outline: none;
+            background-color: #ffffff;
+        }
+
+        .input-field::placeholder {
+            color: #999999;
+        }
+
+        
+        .half-width {
+            width: 55%;
+        }
+
+        
+        .select-wrapper {
+            position: relative;
+            width: fit-content;
+        }
+
+        .select-field {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding-right: 35px;
+            cursor: pointer;
+        }
+
+        .select-wrapper::after {
+            content: '';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-30%);
+            border: 6px solid transparent;
+            border-top-color: #7a7a7a;
+            pointer-events: none;
+        }
+
+        
+        .date-wrapper::after {
+            border: 5px solid transparent;
+            border-top-color: #7a7a7a;
+            transform: translateY(-20%);
+        }
+
+        
+        .footer-section {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .btn-signup {
+            background-color: #ffffff;
+            color: #1a0dab;
+            border: 1px solid #555555;
+            border-radius: 20px;
+            padding: 8px 40px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-signup:hover {
+            background-color: #f0f4ff;
+            border-color: #1a0dab;
+        }
+
+        .account-type-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .toggle-option {
+            flex: 1;
+            max-width: 160px;
+            padding: 10px 15px;
+            border: 1px solid #555555;
+            border-radius: 20px;
+            background-color: #ffffff;
+            color: #1a0dab;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .toggle-option.active {
+            background-color: #1a0dab;
+            color: #ffffff;
+            border-color: #1a0dab;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="signup-card">
+        <div class="header-section">
+            <img class="logo-img" src="assets/img/CClogo/myCC.png" alt=" " />
+            <span class="brand-name">CemboClear</span>
+        </div>
+
+        <div class="page-title">Create Account</div>
+        <div class="divider"></div>
+
+        <div id="signup-error" class="error-banner"></div>
+
+        <form id="signupForm" novalidate>
+            <div class="form-container">
+
+                <div class="form-group">
+                    <label class="section-label">Account Type</label>
+                    <div class="account-type-toggle">
+                        <button type="button" class="toggle-option active" data-role="resident">Resident</button>
+                        <button type="button" class="toggle-option" data-role="admin">Admin</button>
+                    </div>
+                    <input type="hidden" name="account_type" value="resident">
+                </div>
+
+                <div class="form-group" id="position-group" style="display: none;">
+                    <label class="section-label">Position</label>
+                    <div class="select-wrapper">
+                        <select name="position" class="input-field select-field" style="width: 200px;">
+                            <option value="" disabled selected hidden>Position</option>
+                            <option value="System Administrator">System Administrator</option>
+                            <option value="Registrar">Registrar</option>
+                            <option value="Encoder">Encoder</option>
+                            <option value="Records Officer">Records Officer</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="section-label">Name</label>
+                    <input type="text" name="first_name" class="input-field" placeholder="First Name" maxlength="50" required>
+                    <input type="text" name="middle_name" class="input-field" placeholder="Middle Initial" maxlength="2">
+                    <input type="text" name="last_name" class="input-field" placeholder="Last Name" maxlength="50" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="section-label">Birthdate</label>
+                    <div class="select-wrapper date-wrapper">
+                        <input type="date" name="birthdate" class="input-field" max="" required style="width: 170px;">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="section-label">Gender</label>
+                    <div class="select-wrapper">
+                        <select name="gender" class="input-field select-field" required style="width: 120px;">
+                            <option value="" disabled selected hidden>Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="section-label">Email</label>
+                    <input type="email" name="email" class="input-field" placeholder="Email" maxlength="255" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="section-label">Phone No.</label>
+                    <input type="tel" name="phone" class="input-field" value="+63 | " placeholder="Phone No." required>
+                </div>
+
+                <div class="form-group">
+                    <label class="section-label">Password</label>
+                    <input type="password" name="password" class="input-field half-width" placeholder="Password" required>
+                    <input type="password" name="password_confirm" class="input-field half-width" placeholder="Confirm Password" required>
+                </div>
+
+            </div>
+
+            <div class="divider" style="margin-top: 25px; margin-bottom: 15px;"></div>
+            <div class="footer-section">
+                <button type="submit" class="btn-signup">Sign-Up</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="api-client.js"></script>
+    <script src="assets/js/signup-validator.js"></script>
+    <script>
+        
+
+        (function () {
+            const bd = document.querySelector('[name="birthdate"]');
+            if (bd) {
+                const t = new Date();
+                const y = t.getFullYear();
+                const m = String(t.getMonth() + 1).padStart(2, '0');
+                const d = String(t.getDate()).padStart(2, '0');
+                bd.setAttribute('max', y + '-' + m + '-' + d);
+            }
+
+            const toggleOptions = document.querySelectorAll('.toggle-option');
+            const accountTypeInput = document.querySelector('[name="account_type"]');
+            const positionGroup = document.getElementById('position-group');
+
+            toggleOptions.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    toggleOptions.forEach(function (b) { b.classList.remove('active'); });
+                    btn.classList.add('active');
+
+                    const role = btn.getAttribute('data-role');
+                    if (accountTypeInput) accountTypeInput.value = role;
+                    if (positionGroup) {
+                        positionGroup.style.display = role === 'admin' ? 'flex' : 'none';
+                    }
+                });
+            });
+        })();
+
+        document.getElementById('signupForm')?.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const errorBanner = document.getElementById('signup-error');
+            errorBanner.style.display = 'none';
+            errorBanner.innerHTML = '';
+
+            const form = e.target;
+            const payload = {};
+            const fields = ['first_name','middle_name','last_name','birthdate',
+                            'gender','email','phone','password','password_confirm',
+                            'account_type','position'];
+            fields.forEach(function (name) {
+                const el = form.querySelector('[name="' + name + '"]');
+                if (el) payload[name] = el.value;
+            });
+
+            
+
+            
+
+            ['first_name', 'middle_name', 'last_name'].forEach(function (f) {
+                if (typeof payload[f] === 'string') payload[f] = payload[f].trim();
+            });
+            if (typeof payload.email === 'string') payload.email = payload.email.trim().toLowerCase();
+
+            
+
+            if (typeof payload.phone === 'string') {
+                payload.phone = payload.phone.replace(/^\+63\s*\|?\s*/, '');
+            }
+
+            
+
+            const validation = SignupValidator.validate(payload);
+            if (!validation.isValid) {
+                errorBanner.innerHTML = validation.errors.map(err => `<div>• ${err}</div>`).join('');
+                errorBanner.style.display = 'block';
+                return;
+            }
+
+            try {
+                await CemboClear.client().post('/signup', payload);
+                window.location.href = 'CCLog-in.html';
+            } catch (err) {
+                errorBanner.innerHTML = `<div>• ${err.message || 'Signup failed.'}</div>`;
+                errorBanner.style.display = 'block';
+            }
+        });
+    </script>
+
+</body>
+</html>
