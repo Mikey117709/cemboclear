@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CemboClear Resident Dashboard</title>
+    <link rel="stylesheet" href="assets/css/Resident.css?v=5" />
+</head>
+<body>
+    
+    <div id="resident-error-banner" style="display:none; position:fixed; top:90px; max-width:450px; right:20px; z-index:1000; background:#ffebe9; border:1px solid #ff8182; color:#b20000; padding:12px 20px; border-radius:12px; font-weight:600; font-size:14px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        <span id="resident-error-text">An error occurred</span>
+        <button type="button" onclick="hideResidentBanner()" aria-label="Close notification" style="margin-left:15px; background:none; border:none; color:#b20000; font-size:18px; font-weight:bold; cursor:pointer;">&times;</button>
+    </div>
+
+    <aside>
+        <div class="brand-header">
+            <img class="brand-logo" src="assets/img/CClogo/myCC.png" alt="CemboClear logo" />
+            <span class="brand-name">CemboClear</span>
+        </div>
+
+        <div class="user-profile-summary">
+            <div id="sidebar-user-initials" class="profile-icon">R</div>
+            <span class="profile-role">Residents</span>
+        </div>
+
+        <div class="menu-label">Core System</div>
+        <ul class="nav-menu">
+            <li>
+                <a href="#" class="nav-item active" onclick="switchView('calendar-view', this)">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="4" width="18" height="17" rx="2"></rect>
+                        <path d="M3 9h18"></path>
+                        <path d="M8 2v4"></path>
+                        <path d="M16 2v4"></path>
+                    </svg>
+                    Calendar & Appointments
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-item" onclick="switchView('info-view', this)">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 21a7 7 0 0 0-16 0"></path>
+                        <circle cx="12" cy="8" r="4"></circle>
+                    </svg>
+                    Personal Information & Certificates
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-item" onclick="switchView('mailbox-view', this)">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"></path>
+                        <path d="m4 7 8 6 8-6"></path>
+                    </svg>
+                    Mail
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-item" onclick="switchView('agencies-view', this)">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M3 21V8l9-5 9 5v13"></path>
+                        <path d="M9 21V12h6v9"></path>
+                        <path d="M3 10h18"></path>
+                    </svg>
+                    Department & Agencies
+                </a>
+            </li>
+            <li>
+                <div class="nav-item" style="cursor: pointer;" onclick="toggleSettingsMenu(this)">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 0 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 0 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h.1a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h.1a1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 0 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v.1a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"></path>
+                    </svg>
+                    Settings
+                </div>
+                <ul class="sub-menu">
+                    <li class="sub-item" onclick="openUserAccountPanel()" role="button" tabindex="0">User Account</li>
+                    <li class="sub-item">Privacy Policy</li>
+                    <li class="sub-item">Terms and Conditions</li>
+                    <li class="sub-item">Contact Us</li>
+                    <li class="sub-item">About Us</li>
+                    <li class="sub-item logout" onclick="logoutResident()">Log out</li>
+                </ul>
+            </li>
+        </ul>
+    </aside>
+
+    <div id="user-account-backdrop" class="user-account-backdrop" onclick="closeUserAccountPanel()"></div>
+    <div id="user-account-panel" class="user-account-panel" aria-live="polite">
+        <div class="user-account-panel-header">
+            <h3 class="user-account-panel-title">User Account</h3>
+            <button type="button" class="user-account-close-btn" onclick="closeUserAccountPanel()" aria-label="Close user account">&times;</button>
+        </div>
+        <p class="user-account-panel-subtitle">Update your resident account details and security settings here.</p>
+        <div class="user-account-form">
+            <div class="user-account-field">
+                <label for="account-email">Email</label>
+                <input id="account-email" type="email" readonly />
+            </div>
+            <div class="user-account-field">
+                <label for="account-phone">Phone Number</label>
+                <input id="account-phone" type="tel" readonly />
+            </div>
+            <div class="user-account-field">
+                <label for="account-birthdate">Birthdate</label>
+                <input id="account-birthdate" type="date" readonly />
+            </div>
+            <div class="user-account-section-title">Account Control No</div>
+            <div class="user-account-field">
+                <input id="account-control-no" type="text" readonly style="font-weight:bold; color:#0056b3;" />
+            </div>
+        </div>
+        <div class="user-account-actions">
+            <button type="button" class="user-account-btn secondary" onclick="closeUserAccountPanel()">Close</button>
+        </div>
+    </div>
+
+    <main>
+        <nav class="top-navbar">
+            <div class="navbar-title">Online Appointment For Resident</div>
+            <div class="navbar-user-area">
+                <div class="user-pill" onclick="toggleResidentProfile()" role="button" tabindex="0">
+                    <div class="user-pill-initials">JD</div>
+                    <span id="nav-user-name">Juan M. Dela Cruz</span>
+                </div>
+                <div class="bell-notification" onclick="toggleNotifications()" role="button" tabindex="0">
+                    <svg class="bell-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M15 17H5.4a1 1 0 0 1-.9-1.4 3 3 0 0 0 .3-1.4V10a5 5 0 0 1 10 0v4.2a3 3 0 0 0 .3 1.4 1 1 0 0 1-.9 1.4H15Z"></path>
+                        <path d="M9 17v1a3 3 0 0 0 6 0v-1"></path>
+                    </svg>
+                    <span id="resident-notification-badge" class="bell-dot" style="display:none;"></span>
+                </div>
+            </div>
+        </nav>
+
+        <div id="notifications-panel" class="notifications-panel" aria-live="polite">
+            <div class="notifications-header">
+                <h3 class="notifications-title">Notifications</h3>
+                <button type="button" class="notifications-close-btn" onclick="closeNotifications()" aria-label="Close notifications">&times;</button>
+            </div>
+            <div id="resident-notification-list">
+                
+            </div>
+        </div>
+
+        <div class="view-container">
+            <div id="calendar-view" class="dashboard-view active-view">
+                <h2 class="view-title">Calendar & Appointment Scheduler</h2>
+
+                <input type="date" id="appointment-date-picker" style="display:none;" />
+
+                <div class="calendar-wrapper">
+                    <div class="calendar-header">
+                        <button type="button" class="calendar-nav-btn" onclick="switchCalendarMonth(-1)" aria-label="Previous month">&#8249;</button>
+                        <div class="calendar-year" id="calendar-year">2026</div>
+                        <div class="calendar-month" id="calendar-month-label">JANUARY</div>
+                        <button type="button" class="calendar-nav-btn" onclick="switchCalendarMonth(1)" aria-label="Next month">&#8250;</button>
+                    </div>
+                    <div class="calendar-grid" id="resident-calendar-grid">
+                        <span class="day-label">Sun</span><span class="day-label">Mon</span><span class="day-label">Tue</span><span class="day-label">Wed</span><span class="day-label">Thu</span><span class="day-label">Fri</span><span class="day-label">Sat</span>
+                    </div>
+                </div>
+                <div class="resident-calendar-progress" id="resident-calendar-progress" style="display:none;">Loading availability&hellip;</div>
+                <div class="calendar-legend">
+                    <span class="legend-pill legend-avail">Available</span>
+                    <span class="legend-pill legend-booked">Fully Booked</span>
+                    <span class="legend-pill legend-past">Today</span>
+                </div>
+
+                <h3 class="time-section-title">AVAILABLE TIME SLOTS FOR <span id="selected-date-display">SELECT A DATE ON THE CALENDAR</span></h3>
+                <div class="time-divider"></div>
+                <div id="time-slot-list" class="time-slot-list">
+                    <p style="color:#777; font-style:italic;">Pick a date on the calendar to view its time slots.</p>
+                </div>
+
+                <div style="margin-top:15px; text-align:right;">
+                    <button type="button" id="btn-book-appointment" onclick="bookAppointment()" style="background:#28a745; color:#fff; border:none; padding:12px 30px; border-radius:25px; font-weight:bold; font-size:15px; cursor:pointer;" disabled>Book Selected Slot</button>
+                </div>
+
+                <h3 class="time-section-title" style="margin-top:40px;">MY BOOKED APPOINTMENTS</h3>
+                <div class="time-divider"></div>
+                <div id="my-appointments-list" style="display:flex; flex-direction:column; gap:10px;">
+                    
+                </div>
+            </div>
+
+            <div id="info-view" class="dashboard-view">
+                <h2 class="view-title">Personal Information & Certificate Application</h2>
+                <form class="info-form" id="resident-info-form" onsubmit="handleApplyCertificate(event)">
+                    <div class="form-grid-row">
+                        <div class="form-input-container"><input type="text" id="info-last-name" name="last_name" placeholder="Last Name" required /><span class="input-sublabel">( Last Name )</span></div>
+                        <div class="form-input-container"><input type="text" id="info-suffix" name="suffix" placeholder="Suffix, e.g., Jr., Sr., III, IV" /><span class="input-sublabel">( Suffix )</span></div>
+                        <div class="form-input-container"><input type="text" id="info-first-name" name="first_name" placeholder="First Name" required /><span class="input-sublabel">( First Name )</span></div>
+                        <div class="form-input-container"><input type="text" id="info-middle-name" name="middle_name" placeholder="Middle Name" /><span class="input-sublabel">( Middle Name )</span></div>
+                    </div>
+                    <div class="form-grid-row">
+                        <div class="form-input-container"><input type="date" id="info-birthdate" name="birthdate" required /><span class="input-sublabel">( Birth Date )</span></div>
+                        <div class="form-input-container"><input type="text" id="info-birth-place" name="birth_place" placeholder="Birth Place" /><span class="input-sublabel">( Birth Place )</span></div>
+                        <div class="form-input-container">
+                            <select id="info-gender" name="gender" required><option value="">Sex</option><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select>
+                            <span class="input-sublabel">( Sex )</span>
+                        </div>
+                        <div class="form-input-container">
+                            <select id="info-civil-status" name="civil_status"><option value="">Civil Status</option><option value="Single">Single</option><option value="Married">Married</option><option value="Widowed">Widowed</option><option value="Separated">Separated</option></select>
+                            <span class="input-sublabel">( Civil Status )</span>
+                        </div>
+                    </div>
+                    <div class="form-grid-row" style="grid-column: span 3;">
+                        <div class="form-input-container" style="grid-column: span 3;"><input type="text" id="info-address" name="address" placeholder="House Address" required /><span class="input-sublabel">( Residence Address )</span></div>
+                        <div class="form-input-container"><input type="text" id="info-citizenship" name="citizenship" placeholder="Citizenship" /><span class="input-sublabel">( Citizenship )</span></div>
+                    </div>
+                    <div class="form-grid-row" style="grid-template-columns: 1fr 1fr;">
+                        <div class="form-input-container"><input type="tel" id="info-phone" name="phone" placeholder="Contact Number" required /><span class="input-sublabel">( Contact Number )</span></div>
+                        <div class="form-input-container"><input type="email" id="info-email" name="email" placeholder="Email Address" required /><span class="input-sublabel">( E-mail Address )</span></div>
+                    </div>
+
+                    <div class="form-section-heading">Purpose of Certificate</div>
+                    <div style="margin-bottom: 20px;">
+                        <select id="certificate-purpose-select" name="purpose_id" style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc; font-size:14px;" required>
+                            <option value="">-- Loading Certificate Purposes... --</option>
+                        </select>
+                    </div>
+
+                    
+                    <div class="sig-container">
+                        <div class="sig-header-row">
+                            <div>
+                                <label class="sig-main-label">Applicant E-Signature <span style="color:#b00020;">*</span></label>
+                                <p class="sig-sub-label">Provide your handwritten signature or upload an official signature document.</p>
+                            </div>
+                            <div class="sig-segmented-control">
+                                <button type="button" id="tab-sig-draw" class="sig-segment-btn active" onclick="switchSignatureMode('draw')">Draw Signature</button>
+                                <button type="button" id="tab-sig-upload" class="sig-segment-btn" onclick="switchSignatureMode('upload')">Upload File</button>
+                            </div>
+                        </div>
+
+                        
+                        <div id="sig-draw-panel" class="sig-draw-view">
+                            <div class="sig-canvas-wrapper">
+                                <canvas id="signature-canvas" width="480" height="150" class="sig-canvas-element"></canvas>
+                                <div class="sig-baseline-guide"></div>
+                                <span class="sig-baseline-caption">Sign above this line</span>
+                            </div>
+                            <div class="sig-footer-bar">
+                                <div id="sig-status-badge" class="sig-status-pill unready">
+                                    <span class="sig-status-dot"></span>
+                                    <span id="sig-status-text">Awaiting signature</span>
+                                </div>
+                                <button type="button" class="sig-btn-clear" onclick="clearSignatureCanvas() boundary">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Clear Canvas
+                                </button>
+                            </div>
+                        </div>
+
+                        
+                        <div id="sig-upload-panel" class="sig-upload-view" style="display:none;">
+                            <div class="sig-upload-dropzone">
+                                <input type="file" id="info-signature" accept=".jpg,.jpeg,.png,.webp,.pdf,image/jpeg,image/png,image/webp,application/pdf" class="file-control-input" onchange="document.getElementById('signature-file-name').textContent = this.files[0] ? this.files[0].name : 'No file chosen';" />
+                                <div class="file-control">
+                                    <button type="button" class="file-control-btn" onclick="document.getElementById('info-signature').click()">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Choose File
+                                    </button>
+                                    <span class="file-control-name" id="signature-file-name">No file chosen</span>
+                                </div>
+                                <p class="sig-upload-hint">Accepted formats: PNG, JPG, WEBP, PDF (Max 5MB)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="upload-row">
+                        <div class="upload-field">
+                            <label class="upload-field-label" for="info-valid-id">Valid ID Attachment <span style="color:#b00020;">*</span></label>
+                            <div class="file-control">
+                                <input type="file" id="info-valid-id" accept=".jpg,.jpeg,.png,.webp,.pdf,image/jpeg,image/png,image/webp,application/pdf" class="file-control-input" onchange="document.getElementById('valid-id-file-name').textContent = this.files[0] ? this.files[0].name : 'No file chosen';" />
+                                <button type="button" class="file-control-btn" onclick="document.getElementById('info-valid-id').click()">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Choose File
+                                </button>
+                                <span class="file-control-name" id="valid-id-file-name">No file chosen</span>
+                            </div>
+                        </div>
+                        <div class="upload-field">
+                            <label class="upload-field-label">Date/Time of Application</label>
+                            <div class="datetime-display">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:6px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                <input type="text" id="info-datetime" readonly />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-btn-container">
+                        <button type="submit" id="btn-apply-certificate" class="btn-primary">Apply Certificate</button>
+                    </div>
+                </form>
+
+                <h3 class="time-section-title" style="margin-top:40px;">MY APPLIED CERTIFICATES</h3>
+                <div class="time-divider"></div>
+                <div id="my-certificates-list" style="display:flex; flex-direction:column; gap:10px;">
+                    
+                </div>
+
+                <h3 class="time-section-title" style="margin-top:40px;">MY TRANSACTION HISTORY</h3>
+                <div class="time-divider"></div>
+                <div id="resident-transactions-list" style="display:flex; flex-direction:column; gap:10px;">
+                    
+                </div>
+            </div>
+
+            <div id="mailbox-view" class="dashboard-view">
+                <h2 class="view-title">Mail Box</h2>
+                <div class="mailbox-controls">
+                    <div class="mail-actions-left">
+                        <button class="mail-btn" type="button" onclick="openComposeMail()" style="background:#00469b; border-color:#00469b; color:#fff; font-weight:700;">Compose</button>
+                    </div>
+                    <div class="mail-search-bar">
+                        <input type="text" placeholder="Search mail" />
+                        <button class="search-icon-btn" type="button" aria-label="Search">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="11" cy="11" r="6"></circle>
+                                <path d="m20 20-4.2-4.2"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="mailbox-canvas">
+                    <div class="mail-list">
+                        <div id="resident-mail-header" class="mail-list-header">Inbox (0)</div>
+                        <div id="resident-mail-list">
+                            
+                        </div>
+                    </div>
+                    <div class="mail-detail">
+                        <div id="resident-mail-subject" class="mail-detail-title">Select a message</div>
+                        <div class="mail-detail-meta">
+                            <span><strong id="resident-mail-sender">From: --</strong></span>
+                            <span><strong id="resident-mail-date">Date: --</strong></span>
+                        </div>
+                        <div id="resident-mail-body" class="mail-detail-body">
+                            Select a message from your inbox on the left to read its content.
+                        </div>
+                        <div class="mail-detail-actions">
+                            <button type="button" id="resident-mail-read-btn">Mark as Read</button>
+                            <button type="button" onclick="replyToResidentMail()">Reply</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="agencies-view" class="dashboard-view">
+                <h2 class="view-title">Department & Agencies</h2>
+                <div class="agencies-grid">
+                    <div class="agency-card admin">
+                        <div>
+                            <div class="agency-header">
+                                <img class="agency-icon" src="assets/img/CClogo/Administrator.png" alt="Administrative" />
+                                Administrative
+                            </div>
+                            <p class="agency-desc">Oversees all resident requests and ensures proper routing, monitoring, and resolution.</p>
+                            <ul class="agency-services">
+                                <li>General Inquiry/Concern</li>
+                                <li>Resident Record Correction</li>
+                                <li>System Feedback Report</li>
+                                <li>Community Improvement Suggestion</li>
+                                <li>Official Information Request</li>
+                                <li>Request Barangay Profile</li>
+                            </ul>
+                        </div>
+                        <button type="button" class="btn-agency-action" onclick="openComplaintModal('Administrative')">Request</button>
+                    </div>
+
+                    <div class="agency-card health">
+                        <div>
+                            <div class="agency-header">
+                                <img class="agency-icon" src="assets/img/CClogo/HealthCenter.png" alt="Health" />
+                                Health
+                            </div>
+                            <p class="agency-desc">Handles urgent health and emergency response concerns, medical assistance, and critical support services.</p>
+                            <ul class="agency-services">
+                                <li>Medical Assistance Request</li>
+                                <li>Health Certificate Inquiry</li>
+                                <li>Vaccination Slot Request</li>
+                                <li>Senior Citizen Health Program</li>
+                                <li>Community Health Concern Report</li>
+                            </ul>
+                        </div>
+                        <button type="button" class="btn-agency-action" onclick="openComplaintModal('Health')">Request</button>
+                    </div>
+
+                    <div class="agency-card social">
+                        <div>
+                            <div class="agency-header">
+                                <img class="agency-icon" src="assets/img/CClogo/WelfareCare.png" alt="Applying and Requirement" />
+                                Social Welfare
+                            </div>
+                            <p class="agency-desc">Provides support programs and assistance for vulnerable individuals and families.</p>
+                            <ul class="agency-services">
+                                <li>Financial Assistance Request</li>
+                                <li>Senior Citizen Program</li>
+                                <li>PWD Assistance Application</li>
+                                <li>Family Welfare Concern</li>
+                                <li>Livelihood Training Program</li>
+                            </ul>
+                        </div>
+                        <button type="button" class="btn-agency-action" onclick="openComplaintModal('Applying and Requirement')">Request</button>
+                    </div>
+
+                    <div class="agency-card peace">
+                        <div>
+                            <div class="agency-header">
+                                <img class="agency-icon" src="assets/img/CClogo/PeaceAndOrder.png" alt="Peace & Order" />
+                                Peace & Order
+                            </div>
+                            <p class="agency-desc">Manages public safety concerns, complaints, and community security matters.</p>
+                            <ul class="agency-services">
+                                <li>Noise Complaint</li>
+                                <li>Neighborhood Dispute Report</li>
+                                <li>Public Disturbance Report</li>
+                                <li>CCTV Footage Request</li>
+                                <li>Security Assistance Request</li>
+                            </ul>
+                        </div>
+                        <button type="button" class="btn-agency-action" onclick="openComplaintModal('Peace & Order')">Request</button>
+                    </div>
+
+                    <div class="agency-card disaster">
+                        <div>
+                            <div class="agency-header">
+                                <img class="agency-icon" src="assets/img/CClogo/DisasterResponse.png" alt="Emergency" />
+                                Disaster Response
+                            </div>
+                            <p class="agency-desc">Responds to emergencies, hazard reports, and disaster preparedness concerns.</p>
+                            <ul class="agency-services">
+                                <li>Hazard / Danger Report</li>
+                                <li>Flood Management Query</li>
+                                <li>Evacuation Center Inquiry</li>
+                                <li>Rescue Relief Request</li>
+                                <li>Emergency Preparedness Inquiry</li>
+                            </ul>
+                        </div>
+                        <button type="button" class="btn-agency-action" onclick="openComplaintModal('Disaster Response')">Request</button>
+                    </div>
+
+                    <div class="agency-card env">
+                        <div>
+                            <div class="agency-header">
+                                <img class="agency-icon" src="assets/img/CClogo/Environment.png" alt="Environment & Sanitation" />
+                                Environment & Sanitation
+                            </div>
+                            <p class="agency-desc">Handles environmental concerns, sanitation issues, and community cleanliness.</p>
+                            <ul class="agency-services">
+                                <li>Garbage Collection Complaint</li>
+                                <li>Illegal Dumping Report</li>
+                                <li>Drainage Clogging Issue</li>
+                                <li>Street Cleaning Request</li>
+                                <li>Environmental Hazard Report</li>
+                            </ul>
+                        </div>
+                        <button type="button" class="btn-agency-action" onclick="openComplaintModal('Environment & Sanitation')">Request</button>
+                    </div>
+                </div>
+
+                <h3 class="time-section-title" style="margin-top:40px;">MY SUBMITTED REQUESTS & CONCERNS</h3>
+                <div class="time-divider"></div>
+                <div id="my-requests-list" style="display:flex; flex-direction:column; gap:10px;">
+                    
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="resident-profile-backdrop" class="resident-profile-backdrop" onclick="closeResidentProfile()"></div>
+    <div id="resident-profile-card" class="resident-profile-card" aria-live="polite">
+        <button type="button" class="close-btn" onclick="closeResidentProfile()" aria-label="Close profile">&times;</button>
+        <div class="resident-profile-header">
+            <label class="resident-profile-avatar-upload" for="profile-photo-input">
+                <img id="resident-profile-preview" src="" alt="Profile preview" style="display:none;" />
+                <span id="resident-profile-avatar-fallback">JD</span>
+            </label>
+            <div>
+                <h3 id="resident-profile-name-display">Juan M. Dela Cruz</h3>
+                <p id="resident-profile-status-display">Authorized Resident</p>
+            </div>
+        </div>
+        <div class="resident-profile-form">
+            <input id="profile-photo-input" type="file" accept="image/*" hidden />
+            <div class="resident-profile-field">
+                <label for="resident-full-name">Full Name</label>
+                <input id="resident-full-name" type="text" readonly />
+            </div>
+            <div class="resident-profile-field">
+                <label for="resident-email">Email</label>
+                <input id="resident-email" type="email" readonly />
+            </div>
+            <div class="resident-profile-field">
+                <label for="resident-contact">Contact Number</label>
+                <input id="resident-contact" type="tel" readonly />
+            </div>
+            <div class="resident-profile-field">
+                <label for="resident-address">Address</label>
+                <textarea id="resident-address" rows="3" readonly></textarea>
+            </div>
+            <div class="resident-profile-field">
+                <label for="resident-role">Control Number</label>
+                <input id="resident-role" type="text" readonly />
+            </div>
+            <div class="resident-profile-actions">
+                <button type="button" class="user-account-btn secondary" onclick="closeResidentProfile()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="complaint-modal" class="complaint-modal">
+        <div class="complaint-modal-panel">
+            <div class="complaint-modal-header">
+                <div>
+                    <h3 class="complaint-modal-title">Submit Request / Concern</h3>
+                    <p class="complaint-modal-subtitle">Routing details to the Office via: <span id="modal-dept-name"></span></p>
+                </div>
+                <button type="button" class="complaint-close-btn" onclick="closeComplaintModal()">&times;</button>
+            </div>
+            <form class="complaint-form" id="complaint-form" onsubmit="submitComplaint(event)">
+                <div class="complaint-field-group">
+                    <label for="complaint-type">Type of Request / Concern</label>
+                    <select id="complaint-type" class="complaint-field" required>
+                        <option value="">-- Select request type --</option>
+                    </select>
+                </div>
+                <div class="complaint-field-group">
+                    <label for="complaint-message">Details</label>
+                    <textarea id="complaint-message" class="complaint-field" placeholder="Please explain the service needed, concern, or assistance required from the office..." required></textarea>
+                </div>
+                <div class="complaint-field-group">
+                    <label for="complaint-file">Supporting Document / Proof (Optional)</label>
+                    <div class="complaint-file-wrapper">
+                        <label for="complaint-file" class="complaint-file-label" onclick="document.getElementById('complaint-file').click()">Choose file</label>
+                        <span id="complaint-file-name" class="complaint-file-name">No file chosen</span>
+                        <input id="complaint-file" class="complaint-file-input" type="file" accept=".jpg,.jpeg,.png,.webp,.pdf,image/jpeg,image/png,image/webp,application/pdf" />
+                    </div>
+                </div>
+                <div class="complaint-actions">
+                    <button type="button" class="complaint-btn cancel" onclick="closeComplaintModal()">Cancel</button>
+                    <button type="submit" class="complaint-btn submit">Submit Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    
+    <div id="compose-mail-modal" class="complaint-modal">
+        <div class="complaint-modal-panel" style="max-width:560px;">
+            <div class="complaint-modal-header">
+                <div>
+                    <h3 class="complaint-modal-title">Compose Message</h3>
+                    <p class="complaint-modal-subtitle">Send a message to a barangay office or staff member.</p>
+                </div>
+                <button type="button" class="complaint-close-btn" onclick="closeComposeMail()">&times;</button>
+            </div>
+            <form class="complaint-form" id="compose-mail-form" onsubmit="sendResidentMail(event)">
+                <div class="complaint-field-group">
+                    <label for="resident-mail-recipient-search">Recipient (Barangay Office / Staff)</label>
+                    <div style="position:relative;">
+                        <input type="text" id="resident-mail-recipient-search" class="complaint-field" autocomplete="off" placeholder="Search staff or office by name..." required />
+                        <div id="resident-mail-recipient-results" class="compose-recipient-results"></div>
+                    </div>
+                    <input type="hidden" id="resident-mail-recipient-id" />
+                    <input type="hidden" id="resident-mail-recipient-type" value="staff" />
+                </div>
+                <div class="complaint-field-group">
+                    <label for="resident-mail-input-subject">Subject</label>
+                    <input type="text" id="resident-mail-input-subject" class="complaint-field" placeholder="Subject" />
+                </div>
+                <div class="complaint-field-group">
+                    <label for="resident-mail-input-body">Message Body</label>
+                    <textarea id="resident-mail-input-body" class="complaint-field" placeholder="Type your message..." required></textarea>
+                </div>
+                <div class="complaint-actions">
+                    <button type="button" class="complaint-btn cancel" onclick="closeComposeMail()">Cancel</button>
+                    <button type="submit" class="complaint-btn submit">Send Message</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="api-client.js"></script>
+    <script src="assets/js/Resident.js?v=8"></script>
+</body>
+</html>
