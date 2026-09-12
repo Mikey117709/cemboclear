@@ -822,10 +822,24 @@ async function loadAvailableSlots() {
 
     if (dateDisplay) dateDisplay.textContent = selectedDate;
     selectedAppointmentSlot = null;
-    if (bookBtn) bookBtn.disabled = true;
+    if (bookBtn) {
+        bookBtn.disabled = true;
+        bookBtn.style.display = '';
+    }
 
     try {
         const res = await CemboClear.client().get('/appointments/slots?date=' + selectedDate);
+
+        if (res && res.is_weekend) {
+            if (bookBtn) bookBtn.style.display = 'none';
+            slotsContainer.innerHTML = `
+                <div class="time-slot-notice closed">
+                    <strong>The office is closed on weekends.</strong>
+                    <div>Please choose a weekday.</div>
+                </div>`;
+            return;
+        }
+
         const slots = (res && res.slots) ? res.slots : (Array.isArray(res) ? res : []);
 
         if (!slots || slots.length === 0) {

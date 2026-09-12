@@ -614,6 +614,17 @@ main {
     gap: 15px;
 }
 
+.time-slot-notice.closed {
+    padding: 20px 24px;
+    text-align: center;
+    border-radius: 10px;
+    background-color: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #9a3412;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
 .time-slot {
     display: flex;
     align-items: center;

@@ -11,12 +11,18 @@ class AppointmentSchedulingController
 {
     private Database $db;
 
+    private function isWeekend(string $date): bool
+    {
+        $dayOfWeek = (new \DateTimeImmutable($date))->format('N');
+        return $dayOfWeek === '6' || $dayOfWeek === '7';
+    }
+
     public function __construct()
     {
         $this->db = new Database();
     }
 
-    
+
 
     public function availableSlots(): void
     {
@@ -26,10 +32,7 @@ class AppointmentSchedulingController
         if ($date === '' || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
             Response::error('Valid date parameter is required (YYYY-MM-DD).', 422);
         }
-
-        
-
-        
+        $isWeekend = $this->isWeekend($date);
 
         $allSlots = [
             '8:00 - 9:00'     => 8,
@@ -42,26 +45,14 @@ class AppointmentSchedulingController
             '4:00 - 5:00'     => 16,
         ];
 
-        
-
-        
-
-        
-
         $now = new \DateTimeImmutable('now', new \DateTimeZone('Asia/Manila'));
 
-        
+
 
         $booked = $this->db->query(
             "SELECT time_slot FROM appointments WHERE appt_date = ? AND status = 'booked'",
             [$date]
         )->fetchAll(\PDO::FETCH_COLUMN);
-
-        
-
-        
-
-        
 
         $isToday = ($date === $now->format('Y-m-d'));
         $currentHour = (int)$now->format('H');
@@ -71,15 +62,19 @@ class AppointmentSchedulingController
             $alreadyStarted = $isToday && $currentHour >= $startHour;
             $available[] = [
                 'time_slot' => $slot,
-                'available' => !in_array($slot, $booked, true) && !$alreadyStarted,
+                'available' => !$isWeekend && !in_array($slot, $booked, true) && !$alreadyStarted,
                 'expired'   => (bool)$alreadyStarted,
             ];
         }
 
-        Response::json(['date' => $date, 'slots' => $available]);
+        Response::json([
+            'date' => $date,
+            'is_weekend' => $isWeekend,
+            'slots' => $available,
+        ]);
     }
 
-    
+
 
     public function book(): void
     {
@@ -93,14 +88,22 @@ class AppointmentSchedulingController
             Response::error('Date and time_slot are required.', 422);
         }
 
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)){
+            Response::error('Valid date is required (YYYY-MM-DD).',422);
+        }
+
+        if ($this->isWeekend($date)){
+            Response::error('Appointments cannot be booked on weekends.', 422);
+        }
+
         $this->db->beginTransaction();
 
         try {
-            
+
 
             $now = new \DateTimeImmutable('now', new \DateTimeZone('Asia/Manila'));
 
-            
+
 
             $slotStartHours = [
                 '8:00 - 9:00' => 8, '9:00 - 10:00' => 9, '10:00 - 11:00' => 10, '11:00 - 12:00' => 11,
@@ -114,7 +117,7 @@ class AppointmentSchedulingController
                 }
             }
 
-            
+
 
             $existing = $this->db->query(
                 "SELECT id FROM appointments
@@ -148,4 +151,5 @@ class AppointmentSchedulingController
             Response::error('Failed to book appointment.', 500);
         }
     }
+
 }
